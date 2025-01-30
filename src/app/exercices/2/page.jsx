@@ -24,11 +24,20 @@ export default function List() {
       </div>
       <div>
         Friends:
-        <ul></ul>
+        <ul>
+          {/* <li v-for="friend in friends"></li> */}
+          {friends.map((friend) => {
+            return <li key={friend.id}>{friend.name}</li>;
+          })}
+        </ul>
       </div>
       <div>
         Friends no key:
-        <ul></ul>
+        <ul>
+          {friendsNoKey.map((friend, index) => {
+            return <li key={index}>{friend}</li>;
+          })}
+        </ul>
       </div>
     </>
   );
