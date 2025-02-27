@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
+
 export default function FormBuilder() {
-  const formFields = [];
+  const [formFields, setFields] = useState([]);
 
   const handleAddFormField = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     const formData = new FormData(e.target);
 
     const newField = {
@@ -14,11 +18,22 @@ export default function FormBuilder() {
       required: formData.get("required"),
       value: "",
     };
+
+    setFields([...formFields, newField]);
   };
 
-  const handleUpdateFormField = (id, updatedField) => {};
+  const handleUpdateFormField = (id, updatedField) => {
+    setFields(formFields.map((formField) => {
+      if (formField.id === id) {
+        return {...formField, value: updatedField.value}
+      }
+      return formField
+    }))
+  };
 
-  const handleDeleteFormField = (id) => {};
+  const handleDeleteFormField = (id) => {
+    setFields(formFields.filter(formField => formField.id !== id))
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
