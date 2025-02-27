@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 const initialFormData = {
   name: "",
   email: "",
@@ -9,14 +11,16 @@ const initialFormData = {
 };
 
 export default function MultiStepForm() {
-  const currentStep = 1;
-  const formData = initialFormData;
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState(initialFormData);
 
-  const handleChange = () => {};
+  const handleChange = (event) => {
+    setFormData({...formData, [event.target.name]: event.target.value});
+  };
 
-  const handleNextStep = () => {};
+  const handleNextStep = () => setCurrentStep(currentStep + 1);
 
-  const handlePrevStep = () => {};
+  const handlePrevStep = () => setCurrentStep(currentStep - 1);
 
   const handleSubmit = () => {
     alert("Thank you for your submission");
