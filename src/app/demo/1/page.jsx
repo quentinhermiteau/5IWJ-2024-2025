@@ -15,6 +15,8 @@ export default function Page() {
    * Montrer l'intérêt de la cleanup function avec un handleEventListener
    */
   useEffect(() => {
+    let ignore = false
+
     const handleFetchTodo = async () => {
       setLoading(true);
       setTimeout(async () => {
@@ -22,16 +24,31 @@ export default function Page() {
           `https://jsonplaceholder.typicode.com/todos/${id}`
         )
           .then((response) => response.json())
-          .then((response) => ({ response }))
-          .catch((error) => ({ error }));
+          .then((response) => {
+            
+            return { response }})
+            .catch((error) => ({ error }));
+            
+        if (ignore) {
+          return
+        }
 
         setTodo(response);
         setLoading(false);
       }, 500);
     };
 
-    handleFetchTodo();
+    handleFetchTodo()
+
+    return () => {
+      ignore = true
+    }
   }, [id]);
+
+
+  useEffect(() => {
+    console.log('ici');
+  }, [])
 
   return (
     <main>
