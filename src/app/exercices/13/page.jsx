@@ -1,5 +1,7 @@
 "use client";
 
+import { useReducer } from "react";
+
 const initialState = {
   past: [],
   count: 0,
@@ -7,18 +9,42 @@ const initialState = {
 };
 
 function reducer(state, action) {
-  const { past, count, future } = state;
-
-  return state;
+  switch (action.type) {
+    case "INCREMENT":
+      return {
+        past: [...state.past, state.count],
+        count: state.count + 1,
+        future: [],
+      };
+    case "DECREMENT":
+      return {
+        ...state,
+        count: state.count - 1,
+      };
+    case "UNDO":
+      return {
+        past: state.past.slice(0, -1),
+        count: state.past[state.past.length - 1],
+        future: [...state.future, state.count],
+      };
+    case "REDO":
+      return {
+        past: [...state.past, state.count],
+        count: state.future[state.future.length - 1],
+        future: state.future.slice(0, -1),
+      };
+    default:
+      return state;
+  }
 }
 
 export default function CounterWithUndoRedo() {
-  const state = initialState;
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const handleIncrement = () => {};
-  const handleDecrement = () => {};
-  const handleUndo = () => {};
-  const handleRedo = () => {};
+  const handleIncrement = () => dispatch({ type: "INCREMENT" });
+  const handleDecrement = () => dispatch({ type: "DECREMENT" });
+  const handleUndo = () => dispatch({ type: "UNDO" });
+  const handleRedo = () => dispatch({ type: "REDO" });
 
   return (
     <div>
